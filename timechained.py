@@ -42,7 +42,7 @@ def add_watermark(image, text, angle=33, opacity=64):
     text1_width, text1_height = draw.textsize(text1, font)
     draw.text(((width - text1_width) / 2, (height - text1_height) / 2 - 20), text1, font=font, fill=(128, 128, 128, opacity)) # gray font color
 
-    # druga linia tekstu
+    # ..:::::druga linia tekstu:::::..
     text2 = f"Block Hash: {get_current_block_hash()}"
     text2_width, text2_height = draw.textsize(text2, font)
     draw.text(((width - text2_width) / 2, (height - text2_height) / 2 + 20), text2, font=font, fill=(128, 128, 128, opacity)) # gray font color
@@ -60,7 +60,7 @@ def screenshot_with_watermark():
 
     screenshot = add_watermark(screenshot, "", angle=33)
 
-    file_name = f"screenshot_{timestamp}.png"
+    file_name = f"screenshot_{timestamp}:adepthus@{get_current_block_hash()}.png"
     screenshot.save(file_name, "PNG")
     print(f"Screenshot saved as {file_name}")
 
