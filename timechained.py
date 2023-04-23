@@ -7,7 +7,7 @@ from PIL import Image, ImageDraw, ImageFont
 import requests
 
 def get_current_block():
-    url = "https://blockchain.info/q/getblockcount"
+    url = "https://blockstream.info/api/blocks/tip/height"
     try:
         response = requests.get(url)
         return response.text
