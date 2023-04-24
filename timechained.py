@@ -60,7 +60,7 @@ def screenshot_with_watermark():
 
     screenshot = add_watermark(screenshot, "", angle=33)
 
-    file_name = f"screenshot_{timestamp}:adepthus@{get_current_block_hash()}.png"
+    file_name = f"screenshot_{timestamp}.adepthus@{get_current_block_hash()}.png"
     screenshot.save(file_name, "PNG")
     print(f"Screenshot saved as {file_name}")
 
