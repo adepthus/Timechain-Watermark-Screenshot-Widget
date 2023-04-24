@@ -1,6 +1,6 @@
 # timechain-signshot
 
-The tool is designed specifically for verifying authenticity/integrity of record-keeped screenshots by creating a timestamp resistant to tampering and falsification,...
+This thing is designed specifically for proof-keeping authenticity/integrity of record-keeped screenshots by creating a timestamp resistant to tampering and falsification,...
 
 Screenshot captured using this tool, includes a watermark timestamp. Timestamp signed by confirmed thermodynamically block hash, block height, time and internet time. This process ensures that the timestamp cannot be tampered with or falsified, and therefore provides a reliable and trustworthy record of when the screenshot was taken. 
 
