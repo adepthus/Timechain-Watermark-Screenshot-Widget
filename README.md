@@ -36,6 +36,5 @@ The screenshot will be saved as a PNG file with a unique filename that includes 
 
 Note: Make sure to have the necessary dependencies installed before running the program.
 
-To bardzo prosty program użyteczny w bardzo specyficznej sytuacji np. kiedy ktoś chciał by udowodnić że zarejestrował coś pierwszy,... np. SKYPE ID "BITCOIN" i nie tylko,... 
-
+To bardzo prosty program użyteczny w bardzo specyficznej sytuacji np. kiedy ktoś chciał by udowodnić że zarejestrował coś pierwszy,... 
 adepthus@getalby.com
