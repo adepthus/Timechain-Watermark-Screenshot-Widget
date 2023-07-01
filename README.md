@@ -1,4 +1,4 @@
-# watermarked-timechain-signshot
+# watermark-timechain-signshot
 
 
 This thing is designed specifically for proof-keeping authenticity/integrity of record-keeped screenshots by creating a timestamp resistant to tampering and falsification,...
