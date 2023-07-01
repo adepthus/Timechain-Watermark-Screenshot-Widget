@@ -31,7 +31,7 @@ def get_swatch_internet_time():
     beats = int(now / 86.4)
     return f"@{beats:03}"
 
-def add_watermark(image, text, angle=35, opacity=64):
+def add_watermark(image, text, angle=35, opacity=111):
     width, height = image.size
     watermark = Image.new("RGBA", (width, height), (0, 0, 0, 0))
     draw = ImageDraw.Draw(watermark)
