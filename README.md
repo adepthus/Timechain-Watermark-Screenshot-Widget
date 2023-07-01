@@ -21,12 +21,12 @@ Benefits:
 
 Dependencies:
 
-os: Provides a way to interact with the operating system.
-time: Allows time-related operations, such as retrieving the current time and formatting timestamps.
-keyboard: Enables capturing keypress events, used to trigger the screenshot capture.
-pyautogui: Provides screen capture capabilities to take screenshots.
-PIL: The Python Imaging Library, used for image manipulation and adding watermarks.
-requests: Used for making HTTP requests to retrieve blockchain block information from the APIs.
+- os: Provides a way to interact with the operating system.
+- time: Allows time-related operations, such as retrieving the current time and formatting timestamps.
+- keyboard: Enables capturing keypress events, used to trigger the screenshot capture.
+- pyautogui: Provides screen capture capabilities to take screenshots.
+- PIL: The Python Imaging Library, used for image manipulation and adding watermarks.
+- requests: Used for making HTTP requests to retrieve blockchain block information from the APIs.
 
 Instructions:
 
