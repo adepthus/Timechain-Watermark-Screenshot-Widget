@@ -33,8 +33,9 @@ Instructions:
 Enter the desired watermark text prompt when prompted.
 Press the "Print Screen" key to capture a screenshot with the watermark.
 The screenshot will be saved as a PNG file with a unique filename that includes the timestamp, prompt text, and current block hash.
+
 Note: Make sure to have the necessary dependencies installed before running the program.
 
-To naprawdę bardzo niezwykle prosty program jednak użyteczny w bardzo specyficznej sytuacji np. kiedy ktoś chciał by udowodnić że zarejestrował coś pierwszy,... np. SKYPE ID "BITCOIN" 
+To bardzo prosty program użyteczny w bardzo specyficznej sytuacji np. kiedy ktoś chciał by udowodnić że zarejestrował coś pierwszy,... np. SKYPE ID "BITCOIN" i nie tylko,... 
 
 adepthus@getalby.com
