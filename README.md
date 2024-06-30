@@ -5,11 +5,18 @@ This program is designed specifically to ensure the authenticity and integrity o
 
 Features:
 
-- Retrieves the current blockchain block height and block hash from the Blockstream and Blockchain.info APIs.
-- Calculates the Swatch Internet Time based on the current time.
-- Adds a customizable watermark to the captured screenshot with the provided prompt text.
-- Includes a timestamp signed by the confirmed block hash, block height, current local time, and Swatch Internet Time.
-- Ensures that the timestamp cannot be tampered with or falsified, providing a reliable record of when the screenshot was taken.
+- Take screenshots with customizable watermarks
+- Record short videos (10 seconds) with watermarks
+- Create GIFs (21 seconds) with watermarks
+- Watermarks include:
+  - User-defined text
+  - Current time
+  - Bitcoin Beat Time
+  - Current Bitcoin block number
+  - Current Bitcoin block hash
+- Supports both English and Polish languages
+- Cross-platform compatibility (Windows, macOS, Linux)
+
 
 Benefits:
 
@@ -28,11 +35,73 @@ Dependencies:
 - PIL: The Python Imaging Library, used for image manipulation and adding watermarks.
 - requests: Used for making HTTP requests to retrieve blockchain block information from the APIs.
 
-Instructions:
+Requirements
 
-Enter the desired watermark text prompt when prompted.
-Press the "Print Screen" key to capture a screenshot with the watermark.
-The screenshot will be saved as a PNG file with a unique filename that includes the timestamp, prompt text, and current block hash.
+- Python 3.7+
+- pip (Python package installer)
+
+## Installation
+
+1. Clone this repository:
+   ```
+   git clone https://github.com/yourusername/timechain-watermark-screenshot.git
+   cd timechain-watermark-screenshot
+   ```
+
+2. Install the required packages:
+   ```
+   pip install -r requirements.txt
+   ```
+
+## Usage
+
+1. Run the script:
+   ```
+   python timechain_watermark.py
+   ```
+
+2. Choose your preferred language (English or Polish).
+
+3. Enter the watermark prompt when asked.
+
+4. Use the following keys:
+   - `Print Screen`: Take a screenshot with watermark
+   - `F9`: Record a 10-second video with watermark
+   - `F10`: Record a 21-second GIF with watermark
+   - `Ctrl+C`: End the program
+
+## System-specific Requirements
+
+### Windows
+- Ensure Python is added to your PATH
+- Install the Visual C++ Redistributable Packages
+
+### macOS
+- Install Xcode Command Line Tools:
+  ```
+  xcode-select --install
+  ```
+
+### Linux
+- Install the following packages:
+  ```
+  sudo apt-get update
+  sudo apt-get install python3-dev python3-pip python3-tk python3-opencv
+  ```
+
+## Troubleshooting
+
+If you encounter font-related issues:
+1. Ensure you have a font that supports the Bitcoin symbol (₿)
+2. Update the `get_bitcoin_font()` function with the correct path to your font
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 Note: Make sure to have the necessary dependencies installed before running the program.
 
