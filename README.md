@@ -106,4 +106,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 Note: Make sure to have the necessary dependencies installed before running the program.
 
 To bardzo prosty program użyteczny w bardzo specyficznej sytuacji np. kiedy ktoś chciał by udowodnić że zarejestrował coś pierwszy,... 
-adepthus@getalby.com
