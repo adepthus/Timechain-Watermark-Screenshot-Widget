@@ -57,7 +57,7 @@ Requirements
 
 1. Run the script:
    ```
-   python timechain_watermark.py
+   python timechained.py
    ```
 
 2. Choose your preferred language (English or Polish).
