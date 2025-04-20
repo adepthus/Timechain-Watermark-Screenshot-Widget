@@ -1,108 +1,114 @@
-# Timechain Watermark Screenshot
+# Timechain Watermark Screenshot Widget
 
+A minimalist desktop widget for capturing tamper-proof screenshots, videos, and GIFs with blockchain-based timestamps and customizable watermarks. Designed for authenticity and integrity in digital proof-keeping, ideal for legal, compliance, or personal documentation needs.
 
-This program is designed specifically to ensure the authenticity and integrity of recorded screenshots by creating a tamper-resistant timestamp. It provides a reliable and trustworthy method for capturing and timestamping screenshots, making them suitable for proof-keeping purposes.
+# Features
 
-Features:
+Tamper-Resistant Proofs: Embeds real-time blockchain data (Bitcoin block height, hash) and Swatch Internet Time in captures.
+Customizable Watermarks: Add user-defined text, time, and blockchain info with adjustable styles (centered or grid: 3, 5, or 8 watermarks).
+Capture Modes:
 
-- Take screenshots with customizable watermarks
-- Record short videos (10 seconds) with watermarks
-- Create GIFs (21 seconds) with watermarks
-- Watermarks include:
-  - User-defined text
-  - Current time
-  - Bitcoin Beat Time
-  - Current Bitcoin block number
-  - Current Bitcoin block hash
-- Supports both English and Polish languages
-- Cross-platform compatibility (Windows, macOS, Linux)
+- Screenshots (.png) with embedded metadata.
 
+- Videos (.mp4/.avi, configurable duration, default 10s).
 
-Benefits:
+- GIFs (.gif, configurable duration, default 7s).
 
-- Maintains the authenticity and integrity of recorded screenshots by creating a timestamp resistant to tampering and falsification.
-- Provides a reliable and verifiable record of digital activity.
-- Particularly useful in legal or compliance matters where accurate and authentic records are crucial.
-- Helps protect interests and ensures proper documentation of actions.
-- Enhances the trustworthiness of digital records by using blockchain data to validate the timestamp.
+Global Hotkeys: PrintScreen: Capture screenshot.
 
-Dependencies:
+- F9: Record video.
+- F10: Record GIF.
 
-- os: Provides a way to interact with the operating system.
-- time: Allows time-related operations, such as retrieving the current time and formatting timestamps.
-- keyboard: Enables capturing keypress events, used to trigger the screenshot capture.
-- pyautogui: Provides screen capture capabilities to take screenshots.
-- PIL: The Python Imaging Library, used for image manipulation and adding watermarks.
-- requests: Used for making HTTP requests to retrieve blockchain block information from the APIs.
+Cross-Platform: Supports Windows, macOS, and Linux.
 
-Requirements
+Bilingual: English and Polish language support.
 
-- Python 3.7+
-- pip (Python package installer)
+Enhanced Watermarking: Improved grid-based watermark placement (styles 3, 5, 8) with reduced opacity (75%) and font size (30).
 
-## Installation
+File Naming: Structured as TimechainProof(YYYYMMDD-HHMMSS)-prompt @ full_hash.ext.
 
-1. Clone this repository:
-   ```
-   git clone https://github.com/yourusername/timechain-watermark-screenshot.git
-   cd timechain-watermark-screenshot
-   ```
+# Benefits
 
-2. Install the required packages:
-   ```
-   pip install -r requirements.txt
-   ```
+Ensures authenticity with blockchain-validated timestamps.
+Reliable for legal or compliance documentation.
+Enhances trust in digital records.
+Simple, lightweight, and user-friendly.
 
-## Usage
+# Dependencies
 
-1. Run the script:
-   ```
-   python timechained.py
-   ```
+Python 3.7+
+Libraries: requests, pyautogui, Pillow, opencv-python, numpy, pynput
+Video codecs: OpenH264 or XVID (system-dependent)
 
-2. Choose your preferred language (English or Polish).
+Installation
 
-3. Enter the watermark prompt when asked.
+Clone the repository:
 
-4. Use the following keys:
-   - `Print Screen`: Take a screenshot with watermark
-   - `F9`: Record a 10-second video with watermark
-   - `F10`: Record a 21-second GIF with watermark
-   - `Ctrl+C`: End the program
+git clone https://github.com/adepthus/timechain-watermak-widget.git
+cd timechain-watermak-widget
 
-## System-specific Requirements
+Install dependencies:
+pip install -r requirements.txt
 
-### Windows
-- Ensure Python is added to your PATH
-- Install the Visual C++ Redistributable Packages
+# Usage
 
-### macOS
-- Install Xcode Command Line Tools:
-  ```
-  xcode-select --install
-  ```
+Run the script:
 
-### Linux
-- Install the following packages:
-  ```
-  sudo apt-get update
-  sudo apt-get install python3-dev python3-pip python3-tk python3-opencv
-  ```
+python timechained.py
 
-## Troubleshooting
+Select language (en or pl) and enter a custom prompt (default: TimechainProof).
 
-If you encounter font-related issues:
-1. Ensure you have a font that supports the Bitcoin symbol (₿)
-2. Update the `get_bitcoin_font()` function with the correct path to your font
+Interact with the widget:
 
-## Contributing
+Drag (Left Click): Move widget; longer drag scales text.
+Right Click: Access menu to edit prompt, toggle full hash, set capture mode, configure watermark style, adjust video/GIF duration, or close.
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Hotkeys: Use PrintScreen, F9, or F10 for captures.
 
-## License
+Captures are saved in the Timechain_Captures directory with metadata (PNG only).
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+System-Specific Requirements:
 
-Note: Make sure to have the necessary dependencies installed before running the program.
+Windows
 
-To bardzo prosty program użyteczny w bardzo specyficznej sytuacji np. kiedy ktoś chciał by udowodnić że zarejestrował coś pierwszy,... 
+Add Python to PATH.
+
+Install Visual C++ Redistributable Packages.
+
+macOS
+
+Install Xcode Command Line Tools:
+
+xcode-select --install
+
+Linux
+
+Install dependencies:
+
+sudo apt-get update
+sudo apt-get install python3-dev python3-pip python3-tk python3-opencv
+
+Limitations:
+
+Metadata not embedded in MP4/GIF files.
+Video/GIF recording requires appropriate system codecs.
+Font issues may require manual path updates in _get_main_font_path().
+
+Troubleshooting:
+Font Issues: Ensure a compatible font (e.g., Segoe UI) is available or update font paths.
+Codec Errors: Verify OpenH264/XVID codecs are installed for video recording.
+
+Hotkey Conflicts: Check for conflicting applications using PrintScreen, F9, or F10.
+
+Contributing:
+
+Contributions are welcome! Fork the repository, make changes, and submit a Pull Request.
+
+License:
+
+Licensed under the MIT License. See LICENSE for details.
+
+# Author 
+@adepthus 
+
+Secure your digital proofs with Timechained watermark Widget—where blockchain meets simplicity.
