@@ -43,19 +43,19 @@ Video codecs: OpenH264 or XVID (system-dependent)
 Installation
 
 Clone the repository:
-
-git clone https://github.com/adepthus/timechain-watermak-widget.git
-cd timechain-watermak-widget
-
-Install dependencies:
+```
+git clone https://github.com/adepthus/Timechain-Watermark-Screenshot-Widget.git
+cd Timechain-Watermark-Screenshot-Widget
+```
+ Install dependencies:
+```
 pip install -r requirements.txt
-
+```
 # Usage
-
 Run the script:
-
+```
 python timechained.py
-
+```
 Select language (en or pl) and enter a custom prompt (default: TimechainProof).
 
 Interact with the widget:
@@ -69,25 +69,26 @@ Captures are saved in the Timechain_Captures directory with metadata (PNG only).
 
 System-Specific Requirements:
 
-Windows
+Windows:
 
-Add Python to PATH.
+  - Add Python to PATH.
 
-Install Visual C++ Redistributable Packages.
+  - Install Visual C++ Redistributable Packages.
 
 macOS
 
 Install Xcode Command Line Tools:
 
+```
 xcode-select --install
-
+```
 Linux
 
 Install dependencies:
-
+```
 sudo apt-get update
 sudo apt-get install python3-dev python3-pip python3-tk python3-opencv
-
+```
 Limitations:
 
 Metadata not embedded in MP4/GIF files.
