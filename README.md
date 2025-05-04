@@ -54,7 +54,7 @@ pip install -r requirements.txt
 # Usage
 Run the script:
 ```
-python timechained.py
+python timechain-widget.py
 ```
 Select language (en or pl) and enter a custom prompt (default: TimechainProof).
 
