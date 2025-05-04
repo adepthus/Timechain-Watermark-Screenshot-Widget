@@ -1,15 +1,17 @@
 # -*- coding: utf-8 -*-
 """
-Timechain Desktop Widget v6.8.10 (Ulepszone Zapisywanie Plików i Stabilność)
+Timechain Desktop Widget v6.8.11 (Ulepszone Zapisywanie Plików i Stabilność)
 
 Wyświetla dostosowywalny monit z danymi w czasie rzeczywistym i pozwala
 na robienie zrzutów ekranu/nagrań z opcjonalnym, konfigurowalnym znakiem wodnym Timechain.
 
 Nowości w v6.8.10:
-- POPRAWIONO: coś tam poprawiono xD / .exe do poprawy
+- POPRAWIONO: Użycie pełnego hashu w nazwie pliku (jeśli dostępny).
+- POPRAWIONO: Potencjalna poprawka dla edycji monitu w spakowanym .exe (parent=None).
+- POPRAWIONO: coś tam poprawiono xD i coś jeszcze do poprawy
 - POPRAWIONO: Dodatkowe zabezpieczenia przed błędami TclError przy zamykaniu okna.
 - POPRAWIONO: Zabezpieczenia w obliczeniach pozycji znaku wodnego.
-- Ulepszono: Cień, wyświetlanie na jasnym/ciemnym tle. 
+- Ulepszono: Cień, wyświetlanie na jasnym/ciemnym tle.
 """
 
 import os
@@ -143,7 +145,7 @@ if platform.system() == "Windows":
         logging.warning(f"Nie udało się ustawić DPI awareness: {e}")
 
 # --- Konfiguracja ---
-VERSION = "6.8.10"
+VERSION = "6.8.10" # Zaktualizowana wersja z poprawkami
 CACHE_DIR_NAME = "timechain_widget_cache"
 CACHE_TIME_SECONDS = 60
 API_TIMEOUT_SECONDS = 10
@@ -684,6 +686,7 @@ class TimechainWidget:
             # Zwolnij przechwycenie myszy przez menu (ważne)
             popup.grab_release()
 
+    # ----------- POPRAWIONA FUNKCJA _edit_widget -----------
     def _edit_widget(self) -> None:
         """Otwiera okno dialogowe do edycji tekstu monitu."""
         if not self.master.winfo_exists(): return
@@ -692,8 +695,9 @@ class TimechainWidget:
         label = 'Wprowadź nowy monit:' if self.lang == 'pl' else 'Enter new prompt:'
 
         # Użyj simpledialog do pobrania nowego monitu
+        # parent=None może pomóc w spakowanych aplikacjach (.exe), gdzie parent=self.master czasami zawodzi
         new_prompt = simpledialog.askstring(title, label,
-                                            parent=self.master, # Ustawienie rodzica
+                                            parent=None, # Usunięto parent=self.master - potencjalna poprawka dla .exe
                                             initialvalue=self.prompt) # Wartość początkowa w polu
 
         # Sprawdź, czy użytkownik coś wpisał i czy jest to różne od obecnego monitu
@@ -703,15 +707,18 @@ class TimechainWidget:
                  self.prompt = new_prompt_stripped
                  logging.info(f"Zmieniono monit na: {self.prompt}")
                  # Odśwież widok, wymuszając zmianę rozmiaru
+                 # Użyj after_idle dla bezpieczeństwa w Tkinter
                  self.master.after_idle(lambda: self._update_display(force_resize=True))
              elif not new_prompt_stripped:
                  # Monit nie może być pusty
+                 # Użyj after(0, ...) aby wykonać w głównym wątku Tkinter
                  self.master.after(0, lambda: messagebox.showwarning(
                      'Monit pusty' if self.lang == 'pl' else 'Empty Prompt',
                      'Monit nie może być pusty.' if self.lang == 'pl' else 'Prompt cannot be empty.',
-                     parent=self.master
+                     parent=self.master # Tutaj parent=self.master dla messagebox jest zwykle OK
                  ))
              # Jeśli new_prompt == self.prompt, nic nie rób
+    # ---------------------------------------------------------
 
     def _close_widget(self) -> None:
         """Rozpoczyna proces zamykania widgetu."""
@@ -1519,7 +1526,7 @@ class TimechainWidget:
             logging.error(f"Błąd podczas dodawania znaku wodnego (CV2 <-> PIL): {e}", exc_info=True)
             return frame # Zwróć oryginalną klatkę w razie błędu
 
-
+    # ----------- POPRAWIONA FUNKCJA _get_capture_filename -----------
     def _get_capture_filename(self, extension: str, mode: str) -> str:
         """Generuje unikalną nazwę pliku dla przechwyconego obrazu/wideo."""
         # Pobierz aktualny czas UTC
@@ -1532,9 +1539,12 @@ class TimechainWidget:
         # Wybierz część hasha do nazwy pliku (pełny jeśli ok, krótki jeśli ok, inaczej N_A)
         hash_part = "N_A" # Domyślnie
         if isinstance(self._full_block_hash_str, str) and len(self._full_block_hash_str) == 64:
-             hash_part = self._full_block_hash_str[:10] # Pierwsze 10 znaków pełnego hasha
+             # Użyj pełnego hasha (Uwaga: może wydłużyć nazwę pliku)
+             hash_part = self._full_block_hash_str
         elif self._block_hash_short_str and "Error" not in self._block_hash_short_str:
              hash_part = self._block_hash_short_str.replace("...", "-") # Zastąp kropki myślnikiem
+        elif self._full_block_hash_str: # Jeśli mamy tylko błąd w pełnym hashu, pokaż go
+             hash_part = "ErrorHash" # Lub skrócona wersja błędu
 
         # Zbuduj bazową nazwę pliku
         # Dodaj tryb (widget/watermark) dla jasności
@@ -1542,6 +1552,18 @@ class TimechainWidget:
 
         # Usuń znaki niedozwolone w nazwach plików Windows/Unix
         safe_filename_base = "".join(c if c not in r'<>:"/\|?*' else '_' for c in filename_base)
+
+        # Ogranicz długość samej nazwy bazowej (bez rozszerzenia),
+        # aby zmniejszyć ryzyko przekroczenia limitu ścieżki
+        # np. 200 znaków - rozsądny kompromis
+        MAX_BASE_FILENAME_LEN = 200
+        if len(safe_filename_base) > MAX_BASE_FILENAME_LEN:
+             logging.warning(f"Nazwa bazowa pliku skrócona do {MAX_BASE_FILENAME_LEN} znaków.")
+             # Zachowaj początek i koniec, aby zachować unikalność
+             keep_start = MAX_BASE_FILENAME_LEN // 2 - 10
+             keep_end = MAX_BASE_FILENAME_LEN // 2 - 10
+             safe_filename_base = safe_filename_base[:keep_start] + "..." + safe_filename_base[-keep_end:]
+
 
         # Połącz z rozszerzeniem
         filename = f"{safe_filename_base}.{extension.lower()}"
@@ -1552,22 +1574,34 @@ class TimechainWidget:
         # Sprawdź unikalność i dodaj licznik, jeśli plik już istnieje
         full_path = os.path.join(capture_dir, filename)
         counter = 1
+        original_safe_base = safe_filename_base # Zapamiętaj oryginalną bezpieczną nazwę
+
         while os.path.exists(full_path):
             # Dodaj licznik przed rozszerzeniem
-            filename = f"{safe_filename_base}_{counter}.{extension.lower()}"
+            # Upewnij się, że nazwa z licznikiem też nie przekracza limitu
+            suffix = f"_{counter}"
+            if len(original_safe_base) + len(suffix) > MAX_BASE_FILENAME_LEN:
+                 # Jeśli nawet z licznikiem jest za długo, skróć bazę jeszcze bardziej
+                 cut_len = len(original_safe_base) + len(suffix) - MAX_BASE_FILENAME_LEN
+                 safe_filename_base = original_safe_base[:-(cut_len + 3)] + "..." # +3 dla "..."
+            else:
+                 safe_filename_base = original_safe_base # Wróć do oryginału, jeśli jest miejsce
+
+            filename = f"{safe_filename_base}{suffix}.{extension.lower()}"
             full_path = os.path.join(capture_dir, filename)
             counter += 1
             if counter > 100: # Zabezpieczenie przed nieskończoną pętlą
                  logging.error("Nie można znaleźć unikalnej nazwy pliku po 100 próbach.")
-                 # Zwróć nazwę z bardzo dużym licznikiem lub rzuć błąd
-                 timestamp_extra = datetime.datetime.now().strftime("%f") # Dodaj mikrosekundy
-                 filename = f"{safe_filename_base}_{counter}_{timestamp_extra}.{extension.lower()}"
+                 # Zwróć nazwę z bardzo dużym licznikiem lub dodaj mikrosekundy
+                 timestamp_extra = datetime.datetime.now().strftime("%f")
+                 filename = f"{original_safe_base}_{counter}_{timestamp_extra}.{extension.lower()}"
                  full_path = os.path.join(capture_dir, filename)
+                 logging.warning(f"Użyto nazwy awaryjnej: {filename}")
                  break
-
 
         logging.info(f"Wygenerowano ścieżkę zapisu: {full_path}")
         return full_path
+    # ---------------------------------------------------------
 
 
     def _get_capture_directory(self) -> str:
@@ -1893,6 +1927,8 @@ class TimechainWidget:
         # Resetuj/Inicjalizuj stan znaku wodnego dla tego nagrania
         self._fixed_watermark_paste_positions = None
         self._video_gif_random_seed = None
+        frame_count = 0 # Licznik klatek zainicjowany tutaj
+
 
         try:
             # Pobierz rozmiar ekranu (użyj preferowanej metody)
@@ -1997,7 +2033,7 @@ class TimechainWidget:
 
             # Pętla nagrywania
             start_time = time.monotonic() # Użyj monotonicznego zegara
-            frame_count = 0
+            #frame_count = 0 # Przeniesiono inicjalizację wyżej
             last_frame_time = start_time
             min_frame_interval = 1.0 / fps # Minimalny czas między klatkami
 
@@ -2571,7 +2607,7 @@ if __name__ == "__main__":
              is_interactive = False
 
     else:
-        logging.info("Uruchomiono w trybie nieinteraktywnym, używam domyślnych ustawień (lang='en', prompt='TimechainProof').")
+        logging.info(f"Uruchomiono w trybie nieinteraktywnym, używam domyślnych ustawień (lang='{lang}', prompt='{prompt}').")
 
     # Inicjalizacja Tkinter
     root = tk.Tk()
@@ -2596,14 +2632,22 @@ if __name__ == "__main__":
     except tk.TclError as e_tcl:
          logging.critical(f"Krytyczny błąd Tcl/Tk: {e_tcl}", exc_info=True)
          # Spróbuj pokazać błąd, jeśli to możliwe
-         try: messagebox.showerror('Krytyczny Błąd Tk' if lang == 'pl' else 'Critical Tk Error', f"Błąd Tcl/Tk: {e_tcl}\nAplikacja zostanie zamknięta.", parent=None)
+         try:
+             parent_for_error = None
+             if 'root' in locals() and isinstance(root, tk.Tk) and root.winfo_exists():
+                 parent_for_error = root
+             messagebox.showerror('Krytyczny Błąd Tk' if lang == 'pl' else 'Critical Tk Error', f"Błąd Tcl/Tk: {e_tcl}\nAplikacja zostanie zamknięta.", parent=parent_for_error)
          except Exception: pass # Jeśli nawet messagebox zawiedzie
          # Proces zamykania w finally
 
     except Exception as e_main:
         # Inne nieoczekiwane błędy podczas inicjalizacji lub działania
         logging.critical(f"Nieoczekiwany błąd krytyczny w głównym bloku: {e_main}", exc_info=True)
-        try: messagebox.showerror('Błąd Krytyczny' if lang == 'pl' else 'Critical Error', f"Wystąpił nieoczekiwany błąd:\n{e_main}\nAplikacja zostanie zamknięta. Sprawdź logi.", parent=root if root.winfo_exists() else None)
+        try:
+            parent_for_error = None
+            if 'root' in locals() and isinstance(root, tk.Tk) and root.winfo_exists():
+                parent_for_error = root
+            messagebox.showerror('Błąd Krytyczny' if lang == 'pl' else 'Critical Error', f"Wystąpił nieoczekiwany błąd:\n{e_main}\nAplikacja zostanie zamknięta. Sprawdź logi.", parent=parent_for_error)
         except Exception: pass
         # Proces zamykania w finally
 
@@ -2634,7 +2678,8 @@ if __name__ == "__main__":
 
         # Upewnij się, że okno root jest zniszczone (jeśli _safe_destroy nie zadziałało)
         try:
-             if root and root.winfo_exists():
+             # Sprawdź, czy root został zdefiniowany i jest obiektem Tk
+             if 'root' in locals() and isinstance(root, tk.Tk) and root.winfo_exists():
                   logging.debug("Niszczenie okna root w bloku finally (na wszelki wypadek).")
                   root.destroy()
         except Exception as e_destroy_final:
